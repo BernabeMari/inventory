@@ -10,12 +10,11 @@ class ItemController extends Controller
 {
     public function adminPage(){
         $items = Item::all();
-        $test = Item::all();
-        return inertia('AdminDashboard/Index', compact('items' , 'test'));
+        return inertia('AdminDashboard/Index', compact('items'));
     }
 
     public function create_item(Request $request){
-        $items = $request->validate([
+        $items = $request-> validate([
             'product_name' => 'required',
             'quantity' => 'required',
         ]);
@@ -25,11 +24,21 @@ class ItemController extends Controller
 
     public function show_item(){
         $items = Item::all();
-        return Inertia::render('AdminDashboard/Index', ['items' => $items]);
+        return Inertia::render('AdminDashboard/Index', ['items', $items]);
     }
 
-    public function show_test(){
-        $test = Item::all();
-        return Inertia::render('AdminDashboard/Index', ['test' => $test]);
+    public function update_item(Request $request, $id){
+        $items = Item::find($id);
+
+        $items->update([
+            'product_name' => $request->product_name,
+            'quantity' => $request->quantity,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function delete_item(Request $request, $id){
+        $items = Item::destroy($id);
     }
 }
